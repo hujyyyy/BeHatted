@@ -76,7 +76,8 @@ var character_idx = 0;
 
 
 function setup() {
-	createCanvas(SizeW, SizeH, P2D);
+	//createCanvas(SizeW, SizeH, P2D);
+	createCanvas(windowWidth, windowHeight);
 	textSize(20);
 	dt = 300;
 	frameRate(60);
@@ -90,6 +91,25 @@ function setup() {
   	background_img = loadImage("./assets/bg.jpg");
 
 }
+function touchStarted () {
+  var fs = fullscreen();
+  if (!fs) {
+    fullscreen(true);
+  }
+}
+
+/* full screening will change the size of the canvas */
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
+
+/* prevents the mobile browser from processing some default
+ * touch events, like swiping left for "back" or scrolling
+ * the page.
+ */
+document.ontouchmove = function(event) {
+    event.preventDefault();
+};
 
 function initialize() {
 	level = 1;
@@ -228,7 +248,6 @@ function mouseReleased() {
 		gameOver = false;
 		gameOn = true;
 	}
-
 
 	if (canPress && !isDragging) {
 		if (grid.inside(mouseX, mouseY)) piece.inputKey(UP_ARROW);
