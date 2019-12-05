@@ -64,9 +64,12 @@ let sounds = [];
 
 //
 var characters = [];
+let happy_faces = [];
+let sad_faces = [];
 var hat_idx = 0;
 var character_idx = 0;
 var characters_size;
+//var character;
 
 var touchMoved_factor = 1/1.8;
 var tapx,tapy;
@@ -101,13 +104,11 @@ function setup() {
   
     imgs[0] = loadImage("./assets/hat1.png"); imgs[1] = loadImage("./assets/hat2.png");imgs[2] = loadImage("./assets/hat3.png");
     characters[0] = loadImage("./assets/red.png"); characters[1] = loadImage("./assets/blue.png"); characters[2] = loadImage("./assets/yellow.png");
-  
+    happy_faces[0] = loadImage("./assets/red.png"); happy_faces[1] = loadImage("./assets/blue.png"); happy_faces[2] = loadImage("./assets/yellow.png");
+  	sad_faces[0] = loadImage("./assets/red.png"); sad_faces[1] = loadImage("./assets/blue.png"); sad_faces[2] = loadImage("./assets/yellow.png");
+
+
   	background_img = loadImage("./assets/bg.jpg");
-
-}
-
-function preload(){
-	 sounds[0] = loadSound("./assets/1.mp3");sounds[1] = loadSound("./assets/2.mp3");sounds[2] = loadSound("./assets/3.mp3");sounds[3] = loadSound("./assets/4.mp3");sounds[4] = loadSound("./assets/5.mp3");
 
 }
 
@@ -120,6 +121,7 @@ function initialize() {
 	pieces = new Pieces();
 	piece = new Piece(-1);
 	nextPiece = new Piece(-1);
+	character = new Character();
 }
 
 //Small board createCanvas/frozen at beginning/enable rotation/falling pieces
@@ -163,6 +165,7 @@ function draw() {
         }
 		var now = millis();
 		var t = dt/8;
+		if(soundbuffer[idx]!=0)t*=4;
 		if (now - currentTime > t) {
 			currentTime = now;
             canSound = true;
@@ -177,7 +180,8 @@ function draw() {
 		}
 		//piece.display(false);
 		score.display();
-		drawCharacter();
+		character.draw();
+		//drawCharacter();
 		return;
 
 	}
@@ -203,7 +207,8 @@ function draw() {
 		}
 		piece.display(false);
 		score.display();
-		drawCharacter();
+		character.draw();
+		//drawCharacter();
 
 	}
 	if (gameOver) {
@@ -321,7 +326,11 @@ class Score {
 	}
 
 	addPiecePoints() {
-		this.points += level * 5;
+		//this.points += level * 5;
+	}
+
+	addHatPoints(){
+		this.points +=50;
 	}
 
 	addLevelPoints() {
@@ -393,6 +402,88 @@ class Score {
 	}
 }
 
+class Character{
+
+	constructor(){
+		//gem id
+		this.cid = 0;
+		//face id(0-normal,1-sad,2-happy)
+		this.fid = 1;
+		this.hat_id = 1;
+
+		this.hatdroptime = 10;
+		this.hatdrop = this.hatdroptime;
+
+		this.faceAnimTime = 13;
+		this.faceAnim = 0;
+		this.happyAnim = [0,0,0,-q/5,-q/5*2,-q/5*3,-q/5*4,-q/5*3,-q/5*2,-q/5,0,0,0];
+		this.sadAnim = [0,0,0,-q/7,q/7,-q/8,q/8,-q/9,0,q/9,0,0,0];
+	}
+
+	draw(){
+		
+		var face;
+		switch(this.fid){
+			case 0:
+				face = characters[this.cid];break;
+			case 1:
+				face = sad_faces[this.cid];break;
+			case 2:
+				face = happy_faces[this.cid];break;
+			default:
+				break;
+
+		}
+
+		push();
+		if(this.hatdrop==0&&this.faceAnim<this.faceAnimTime){
+			if(this.fid == 1) translate(this.sadAnim[this.faceAnim++],0);
+			if(this.fid == 2) translate(0,this.happyAnim[this.faceAnim++]);
+		}
+		image(face,(offsetW-characters_size)/2,SizeH/2+characters_size*1.2+q,characters_size,characters_size);
+		
+
+		for(let i=0;i<this.hatdrop;++i) translate(0,-q/5);
+
+		if(this.hatdrop>0)this.hatdrop--;
+
+		if(this.hat_id==0)
+			image(imgs[this.hat_id],(offsetW-characters_size)/2,SizeH/2+characters_size*1.2/3+q,characters_size,characters_size);
+		else if(this.hat_id>0)
+			image(imgs[this.hat_id],(offsetW-characters_size)/2,SizeH/2+characters_size*1.2/2+q,characters_size,characters_size);
+		pop();
+
+		if(this.faceAnim==this.faceAnimTime) this.next();
+
+	}
+
+	next(){
+		if(this.cid==this.hat_id){
+			this.cid = (this.cid + 1+int(random(2)))%3;
+			score.addHatPoints();
+		}
+
+		else{
+			this.hatdrop = this.hatdroptime;
+			this.faceAnim = this.faceAnimTime;
+		}
+
+		this.hat_id = -1;
+	}
+
+	new_hat(hat_idx){
+		this.hat_id = hat_idx;
+		this.hatdrop = this.hatdroptime; 
+		this.faceAnim = 0;
+		this.fid = this.cid==this.hat_id?2:1;
+	}
+
+
+}
+
+
+
+
 function playSound(code) {
 	if(code==0) return;
 	if(combo_idx<combo){
@@ -406,13 +497,17 @@ function playSound(code) {
  	var tmp = code;
  	var count = 0;
 
-  while(tmp!=0){
+  	while(tmp!=0){
 		if(tmp%2!=0){
 			hat_idx = count;
 		}
 		tmp = tmp>>1;count++;
 	}
 	character_idx = (character_idx+1)%3;
+
+	character.new_hat(hat_idx);
+
+
 
 }
 
