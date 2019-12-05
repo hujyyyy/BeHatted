@@ -1,12 +1,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  .lock-screen {
-    height: 100%;
-    overflow: hidden;
-    width: 100%;
-    position: fixed;
-	}
+  overflow-y:hidden;
 }
 canvas {
   display: block;
