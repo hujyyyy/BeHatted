@@ -412,6 +412,9 @@ function drawCharacter(){
 		image(imgs[hat_idx],(offsetW-character.width)/2,SizeH-300-110,180,180);
 
 }
+function touchMoved() {
+  return false;
+}
 
 function drawImg(cid, w, h,sizeW, sizeH, alpha){
 	image(imgs[cid],w,h,sizeW,sizeH);
