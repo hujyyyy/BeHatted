@@ -73,7 +73,14 @@ var tapx,tapy;
 let horizontal_move = false;
 
 
-
+function preload()
+{
+	sounds[0] = loadSound("./assets/1.mp3");
+	sounds[1] = loadSound("./assets/2.mp3");
+	sounds[2] = loadSound("./assets/3.mp3");
+	sounds[3] = loadSound("./assets/4.mp3");
+	sounds[4] = loadSound("./assets/5.mp3");
+}
 
 function setup() {
 	//createCanvas(SizeW, SizeH, P2D);
