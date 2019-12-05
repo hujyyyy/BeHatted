@@ -1,8 +1,3 @@
-var mobile = false;
-
-var recreateCanvas_factor = 1.8;
-if(mobile) recreateCanvas_factor = 1;
-
 var w = 8;
 var h = 8 + 5;
 var header_num = 5;
@@ -13,7 +8,7 @@ var coolDownTime = 500;
 let canPress = true, isDragging = false;
 var mx = 0, my = 0;
 
-var q = 35*recreateCanvas_factor; //blocks width and height
+var q = 35; //blocks width and height
 var dt; // delay between each move
 var currentTime;
 var grid;
@@ -59,8 +54,8 @@ var canSound = true;
 //time limit used for mode 2 (with a scale of second)
 var time_limit = 12000;
 
-var SizeW = 400*recreateCanvas_factor, SizeH = 500*recreateCanvas_factor;
-var offsetW = (SizeW-q*w)/2+q, offsetH = (SizeH-q*h)/2;
+var SizeW = 400, SizeH = 500;
+var offsetW, offsetH;
 
 
 //load images and sounds
@@ -71,14 +66,20 @@ let sounds = [];
 var characters = [];
 var hat_idx = 0;
 var character_idx = 0;
+var characters_size;
 
 
 
 
 function setup() {
 	//createCanvas(SizeW, SizeH, P2D);
-	createCanvas(displayWidth, displayHeight);
-	textSize(20);
+	//createCanvas(displayWidth, displayHeight);
+	if(windowWidth>1125||windowHeight>2436){
+		SizeW = 600; SizeH = 900; 
+	}else{
+		SizeW = windowWidth; SizeH = windowHeight;
+	}
+	createCanvas(SizeW,SizeH);
 	dt = 300;
 	frameRate(60);
     textColor = color(34, 230, 190)
@@ -114,8 +115,12 @@ function initialize2() {
 	frozen = true;
 	frozenCountMax = 1000;
 	preview = true;
-	offsetW = (SizeW-q*w)/2+1.5*q, offsetH = (SizeH-q*h)/2;
 
+	q = min(SizeW,SizeH)/9;
+	textSize(q/2);
+	txtSize = q;
+	characters_size = 2.2*q;
+	offsetW = (SizeW-q*w)/2+q*1.2, offsetH = (SizeH-q*h)/2;
 }
 
 function draw() {
@@ -171,7 +176,7 @@ function draw() {
 				else {
 					frozenCount = 0;
 					frozen = false;
-					piece.oneStepDown();
+					//piece.oneStepDown();
 				}
 
 
@@ -264,6 +269,7 @@ function touchEnded(){
 		piece.inputKey(SHIFT);
 	}
 	isDragging = false;
+	return false;
 }
 
 function touchMoved(){
@@ -272,6 +278,7 @@ function touchMoved(){
 		my = mouseY;
 		isDragging = true;
 	}
+	return false;
 }
 
 
@@ -317,6 +324,7 @@ class Score {
 	}
 
 	display() {
+		stroke(50);
 		push();
 		translate(10, 60);
 
@@ -324,12 +332,13 @@ class Score {
 		fill(textColor);
 		text("score: ", 0, 0);
 		fill(230, 230, 12);
-		text("" + this.formatPoint(this.points), 0, txtSize);
+		text("" + this.formatPoint(this.points), 0, txtSize/2);
 		fill(textColor);
 
-		translate(0, 60);
+		translate(0, txtSize*1.5);
 		text("next: ", 0, 0);
-		translate(q*1.2, 1.3 * q);
+		translate(q, 1.3 * q);
+		scale(0.7);
 		nextPiece.display(true);
 		pop();
 
@@ -404,16 +413,13 @@ function playSound(code) {
 
 function drawCharacter(){
 	var character = characters[character_idx];
-	image(character,(offsetW-character.width)/2,SizeH-300,180,180);
+	image(character,(offsetW-characters_size)/2,SizeH/2+characters_size,characters_size,characters_size);
 	
 	if(hat_idx==0)
-		image(imgs[hat_idx],(offsetW-character.width)/2,SizeH-300-130,180,180);
+		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size/5,characters_size,characters_size);
 	else
-		image(imgs[hat_idx],(offsetW-character.width)/2,SizeH-300-110,180,180);
+		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size/3,characters_size,characters_size);
 
-}
-function touchMoved() {
-  return false;
 }
 
 function drawImg(cid, w, h,sizeW, sizeH, alpha){
