@@ -500,10 +500,10 @@ function playSound(code) {
   	while(tmp!=0){
 		if(tmp%2!=0){
 			hat_idx = count;
+			if(character.cid==hat_idx) break;
 		}
 		tmp = tmp>>1;count++;
 	}
-	character_idx = (character_idx+1)%3;
 
 	character.new_hat(hat_idx);
 
