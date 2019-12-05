@@ -68,17 +68,24 @@ var hat_idx = 0;
 var character_idx = 0;
 var characters_size;
 
+var touchMoved_factor = 1/1.8;
+var tapx,tapy;
+let horizontal_move = false;
+
 
 
 
 function setup() {
 	//createCanvas(SizeW, SizeH, P2D);
 	//createCanvas(displayWidth, displayHeight);
-	if(windowWidth>1125||windowHeight>2436){
+	if(displayWidth>1125||displayHeight>2436){
 		SizeW = 600; SizeH = 900; 
 	}else{
-		SizeW = windowWidth; SizeH = windowHeight;
+		//compansate for the space taken by browser
+		SizeW = displayWidth; SizeH = displayHeight*0.95;
 	}
+
+		
 	createCanvas(SizeW,SizeH);
 	dt = 300;
 	frameRate(60);
@@ -86,10 +93,14 @@ function setup() {
     backgroundColor = color(155,155,155);
   
     imgs[0] = loadImage("./assets/hat1.png"); imgs[1] = loadImage("./assets/hat2.png");imgs[2] = loadImage("./assets/hat3.png");
-    sounds[0] = loadSound("./assets/1.mp3");sounds[1] = loadSound("./assets/2.mp3");sounds[2] =     loadSound("./assets/3.mp3");sounds[3] = loadSound("./assets/4.mp3");sounds[4] = loadSound("./assets/5.mp3");
     characters[0] = loadImage("./assets/red.png"); characters[1] = loadImage("./assets/blue.png"); characters[2] = loadImage("./assets/yellow.png");
   
   	background_img = loadImage("./assets/bg.jpg");
+
+}
+
+function preload(){
+	 sounds[0] = loadSound("./assets/1.mp3");sounds[1] = loadSound("./assets/2.mp3");sounds[2] = loadSound("./assets/3.mp3");sounds[3] = loadSound("./assets/4.mp3");sounds[4] = loadSound("./assets/5.mp3");
 
 }
 
@@ -116,11 +127,11 @@ function initialize2() {
 	frozenCountMax = 1000;
 	preview = true;
 
-	q = min(SizeW,SizeH)/9;
+	q = min(SizeW,SizeH)/10;
 	textSize(q/2);
 	txtSize = q;
-	characters_size = 2.2*q;
-	offsetW = (SizeW-q*w)/2+q*1.2, offsetH = (SizeH-q*h)/2;
+	characters_size = 2.5*q;
+	offsetW = (SizeW-q*w)/2+q*1.2, offsetH = q*1.5;
 }
 
 function draw() {
@@ -227,48 +238,33 @@ function goToNextLevel() {
 	//soundLevelUp();
 }
 
-function mouseReleased() {
-	if (!gameOn) {
-        initialize2();
-		initialize();
-		gameOver = false;
-		gameOn = true;
+function touchStarted(){
+	if(gameOn){
+		tapx = mouseX;
+		tapy = mouseY;
 	}
 
-	// if (canPress && !isDragging) {
-	// 	if (grid.inside(mouseX, mouseY)) piece.inputKey(UP_ARROW);
-	// 	else if (grid.rightside(mouseX, mouseY)) {
-	// 		piece.inputKey(RIGHT_ARROW);
-	// 	} else if (grid.leftside(mouseX, mouseY)) {
-	// 		piece.inputKey(LEFT_ARROW);
-	// 	}
-	// 	canPress = false;
-	// }
-	// if (isDragging && mouseY > my) {
-	// 	piece.inputKey(SHIFT);
-	// }
-	// isDragging = false;
 }
-// function mouseDragged() {
-// 	if (!isDragging) {
-// 		mx = mouseX;
-// 		my = mouseY;
-// 		isDragging = true;
-// 	}
 
-// }
 function touchEnded(){
 	if (!gameOn) {
         initialize2();
 		initialize();
 		gameOver = false;
 		gameOn = true;
+		return;
 	}
 
-	if (isDragging && mouseY > my) {
+	if (!horizontal_move&&isDragging && mouseY-my > 2) {
 		piece.inputKey(SHIFT);
+	}else{
+		if(mouseX==tapx&&mouseY==tapy) piece.inputKey(UP_ARROW);
 	}
+
+
 	isDragging = false;
+	horizontal_move = false;
+
 	return false;
 }
 
@@ -278,6 +274,8 @@ function touchMoved(){
 		my = mouseY;
 		isDragging = true;
 	}
+	if(mouseX-mx>q*touchMoved_factor) {piece.inputKey(RIGHT_ARROW); mx = mouseX; horizontal_move = true;}
+	if(mouseX-mx<-q*touchMoved_factor) {piece.inputKey(LEFT_ARROW);	mx = mouseX; horizontal_move = true;}
 	return false;
 }
 
@@ -326,7 +324,7 @@ class Score {
 	display() {
 		stroke(50);
 		push();
-		translate(10, 60);
+		translate(10, q);
 
 		//score
 		fill(textColor);
@@ -413,12 +411,12 @@ function playSound(code) {
 
 function drawCharacter(){
 	var character = characters[character_idx];
-	image(character,(offsetW-characters_size)/2,SizeH/2+characters_size,characters_size,characters_size);
+	image(character,(offsetW-characters_size)/2,SizeH/2+characters_size*1.2,characters_size,characters_size);
 	
 	if(hat_idx==0)
-		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size/5,characters_size,characters_size);
+		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size*1.2/3,characters_size,characters_size);
 	else
-		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size/3,characters_size,characters_size);
+		image(imgs[hat_idx],(offsetW-characters_size)/2,SizeH/2+characters_size*1.2/2,characters_size,characters_size);
 
 }
 
