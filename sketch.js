@@ -92,7 +92,6 @@ function setup() {
     backgroundColor = color(155,155,155);
   
     imgs[0] = loadImage("./assets/hat1.png"); imgs[1] = loadImage("./assets/hat2.png");imgs[2] = loadImage("./assets/hat3.png");
-    sounds[0] = loadSound("./assets/1.mp3");sounds[1] = loadSound("./assets/2.mp3");sounds[2] =     loadSound("./assets/3.mp3");sounds[3] = loadSound("./assets/4.mp3");sounds[4] = loadSound("./assets/5.mp3");
     characters[0] = loadImage("./assets/red.png"); characters[1] = loadImage("./assets/blue.png"); characters[2] = loadImage("./assets/yellow.png");
   
   	background_img = loadImage("./assets/bg.jpg");
