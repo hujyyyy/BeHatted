@@ -97,9 +97,9 @@ function preload()
 
 function unlock_sound(){
 	// Play all audio files on the first tap and stop them immediately.
-	sound0.play();
-	sound1.play();
-	sound2.play();
+	sound0.play();sound0.pause();
+	sound1.play();sound1.pause();
+	sound2.play();sound2.pause();
 	//testsound.play();
 
 }
