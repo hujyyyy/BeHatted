@@ -402,34 +402,34 @@ class Pieces {
     
   
     //// @ @ ////
-		////   @ ////
-    ////   @ ////
-    this.pos[6][0][0][0] = 0;//piece 6, rotation 0, point nb 0, x
+    //// @   ////
+    //// @   ////
+    this.pos[6][0][0][0] = -1;//piece 6, rotation 0, point nb 0, x
     this.pos[6][0][0][1] = 1;//piece 6, rotation 0, point nb 0, y
-    this.pos[6][0][1][0] = 1;
+    this.pos[6][0][1][0] = 0;
     this.pos[6][0][1][1] = 1;
-    this.pos[6][0][2][0] = 1;
+    this.pos[6][0][2][0] = 0;
     this.pos[6][0][2][1] = 0;
-    this.pos[6][0][3][0] = 1;
+    this.pos[6][0][3][0] = 0;
     this.pos[6][0][3][1] = -1;
 
-    this.pos[6][1][0][0] = 2;
+    this.pos[6][1][0][0] = 0;
     this.pos[6][1][0][1] = 1;
-    this.pos[6][1][1][0] = 2;
+    this.pos[6][1][1][0] = 0;
     this.pos[6][1][1][1] = 0;
-    this.pos[6][1][2][0] = 1;
+    this.pos[6][1][2][0] = -1;
     this.pos[6][1][2][1] = 0;
-    this.pos[6][1][3][0] = 0;
+    this.pos[6][1][3][0] = -2;
     this.pos[6][1][3][1] = 0;
 
     this.pos[6][2][0][0] = 1;
-    this.pos[6][2][0][1] = -1;
+    this.pos[6][2][0][1] = 0;
     this.pos[6][2][1][0] = 0;
-    this.pos[6][2][1][1] = -1;
+    this.pos[6][2][1][1] = 0;
     this.pos[6][2][2][0] = 0;
-    this.pos[6][2][2][1] = 0;
+    this.pos[6][2][2][1] = 1;
     this.pos[6][2][3][0] = 0;
-    this.pos[6][2][3][1] = 1;
+    this.pos[6][2][3][1] = 2;
 
     this.pos[6][3][0][0] = 0;
     this.pos[6][3][0][1] = -1;
