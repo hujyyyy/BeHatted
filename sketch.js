@@ -75,17 +75,38 @@ var touchMoved_factor = 1/1.8;
 var tapx,tapy;
 let horizontal_move = false;
 
+//fix ios sound problem
+var first_touch = true;
+var allAudio = [];
+var testsound,sound1,sound2,sound0;
 
 function preload()
 {
-	sounds[0] = loadSound("./assets/1.mp3");
-	sounds[1] = loadSound("./assets/2.mp3");
-	sounds[2] = loadSound("./assets/3.mp3");
-	sounds[3] = loadSound("./assets/4.mp3");
-	sounds[4] = loadSound("./assets/5.mp3");
+	soundFormats('mp3');
+	sound0 = loadSound("./assets/1.mp3");
+	sound1 = loadSound("./assets/2.mp3");
+	sound2 = loadSound("./assets/3.mp3");
+	// sounds[0] = loadSound("./assets/1.mp3");
+	// sounds[1] = loadSound("./assets/2.mp3");
+	// sounds[2] = loadSound("./assets/3.mp3");
+	// sounds[3] = loadSound("./assets/4.mp3");
+	// sounds[4] = loadSound("./assets/5.mp3");
+
+}
+
+
+function unlock_sound(){
+	// Play all audio files on the first tap and stop them immediately.
+	sound0.play();
+	sound1.play();
+	sound2.play();
+	//testsound.play();
+
 }
 
 function setup() {
+	//sounds[0].setVolume(1);
+	//sounds[0].play();
 	//createCanvas(SizeW, SizeH, P2D);
 	//createCanvas(displayWidth, displayHeight);
 	if(displayWidth>1125||displayHeight>2436){
@@ -109,10 +130,10 @@ function setup() {
 
 
   	background_img = loadImage("./assets/bg.jpg");
-
 }
 
 function initialize() {
+
 	level = 1;
 	nbLines = 0;
 	currentTime = millis();
@@ -144,7 +165,6 @@ function initialize2() {
 }
 
 function draw() {
-	
 	if (mode == 2) {
 		time_limit -= 1 / 60;
 		if (time_limit <= 0) gameOver = true;
@@ -251,6 +271,7 @@ function goToNextLevel() {
 }
 
 function touchStarted(){
+	if(first_touch){unlock_sound();first_touch = false;}
 	if(gameOn){
 		tapx = mouseX;
 		tapy = mouseY;
@@ -482,12 +503,24 @@ class Character{
 }
 
 
+function playsound_idx(id){
+	switch(id){
+	case 0:
+		sound0.play();break;
+	case 1:
+		sound1.play();break;
+	default:
+		sound2.play();break;
+	}
 
+}
 
 function playSound(code) {
 	if(code==0) return;
 	if(combo_idx<combo){
-		sounds[combo_idx++].play();
+		playsound_idx(combo_idx++);
+		//sounds[combo_idx++].play();
+		//testsound.play();
 	}
 	if(combo_idx>=combo){
 		combo_idx = 0;
@@ -506,8 +539,6 @@ function playSound(code) {
 	}
 
 	character.new_hat(hat_idx);
-
-
 
 }
 
