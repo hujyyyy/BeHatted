@@ -80,6 +80,10 @@ var first_touch = true;
 var allAudio = [];
 var testsound,sound1,sound2,sound0;
 
+//start screen and restart screen
+var startScreen;
+var endScreen;
+
 function preload()
 {
 	soundFormats('mp3');
@@ -128,6 +132,8 @@ function setup() {
     happy_faces[0] = loadImage("./assets/red.png"); happy_faces[1] = loadImage("./assets/blue.png"); happy_faces[2] = loadImage("./assets/yellow.png");
   	sad_faces[0] = loadImage("./assets/red.png"); sad_faces[1] = loadImage("./assets/blue.png"); sad_faces[2] = loadImage("./assets/yellow.png");
 
+  	startScreen = loadImage("./assets/StartGame.png");
+  	endScreen = loadImage("./assets/RestartGame.png");
 
   	background_img = loadImage("./assets/bg.jpg");
 }
@@ -232,21 +238,23 @@ function draw() {
 
 	}
 	if (gameOver) {
-		noStroke();
+		/*noStroke();
 		fill(255, 60);
 		rect(110, 195, 240, 2 * txtSize, 3);
 		fill(textColor);
-		text("Game Over", 120, 220);
+		text("Game Over", 120, 220);*/
+		image(endScreen,0,0);
 	}
 	if (!gameOn) {
-		noStroke();
+		/*noStroke();
 		fill(255, 60);
 		rect(10, 150, 590, 10 * txtSize, 3);
 		fill(textColor);
 		text("Click to start playing", 20, 180);
 		text("Tap on both side to move the tetris", 20, 180 + 2 * txtSize);
 		text("Tap on the grid to rotate", 20, 180 + 4 * txtSize);
-		text("Swipe down to drop it", 20, 180 + 6 * txtSize);
+		text("Swipe down to drop it", 20, 180 + 6 * txtSize);*/
+		image(startScreen,0,0);
 
 	}
 	if (grid != null && grid.checkEnd()) {
