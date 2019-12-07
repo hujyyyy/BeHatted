@@ -263,17 +263,17 @@ function draw() {
 		var xoffset = SizeW*0.12;
 		var yoffset = SizeH*0.17;
 		text("Click/tap to start playing", xoffset, yoffset);
-		text("PC: ARROW Keys to control", xoffset, yoffset + 2 * txtSize);
+		text("PC: ARROW KEYs to move", xoffset, yoffset + 2 * txtSize);
 		text("      SHIFT or DOWN to drop", xoffset, yoffset + 4 * txtSize);
 		text("Mobile: Swipe left/right to move", xoffset, yoffset + 6 * txtSize);
-		text("             Tap to Rotate", xoffset, yoffset + 8 * txtSize);
+		text("             Tap to rotate", xoffset, yoffset + 8 * txtSize);
 		text("             Swipe down to drop", xoffset, yoffset + 10 * txtSize);
 
 		xoffset = SizeW*0.27;
 		fill(55, 90);
 		rect(SizeW*0.2, SizeH*0.1 + txtSize*14, SizeW*0.6, txtSize*2.5, 3);
 		fill(mute_txtcolor);
-		text("Click/Tap Here to play ", xoffset, yoffset+13.2*txtSize);
+		text("Click/Tap here to play ", xoffset, yoffset+13.2*txtSize);
 		text("     with no sound", xoffset,yoffset+14*txtSize);
 
 	}
