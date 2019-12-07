@@ -80,6 +80,10 @@ var first_touch = true;
 var allAudio = [];
 var testsound,sound1,sound2,sound0;
 
+//start screen and restart screen
+var startScreen;
+var endScreen;
+
 function preload()
 {
 	soundFormats('mp3');
@@ -127,7 +131,6 @@ function setup() {
     characters[0] = loadImage("./assets/red.png"); characters[1] = loadImage("./assets/blue.png"); characters[2] = loadImage("./assets/yellow.png");
     happy_faces[0] = loadImage("./assets/red_happy.png"); happy_faces[1] = loadImage("./assets/blue_happy.png"); happy_faces[2] = loadImage("./assets/yellow_happy.png");
   	sad_faces[0] = loadImage("./assets/red_sad.png"); sad_faces[1] = loadImage("./assets/blue_sad.png"); sad_faces[2] = loadImage("./assets/yellow_sad.png");
-
 
   	background_img = loadImage("./assets/bg3.jpg");
 }
@@ -262,7 +265,6 @@ function draw() {
 		text("Mobile: Swipe left/right to move", xoffset, yoffset + 6 * txtSize);
 		text("             Tap to Rotate", xoffset, yoffset + 8 * txtSize);
 		text("             Swipe down to drop", xoffset, yoffset + 10 * txtSize);
-
 	}
 	if (grid != null && grid.checkEnd()) {
 		gameOver = true;
