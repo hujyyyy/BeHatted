@@ -79,6 +79,8 @@ let horizontal_move = false;
 var first_touch = true;
 var allAudio = [];
 var testsound,sound1,sound2,sound0;
+var mute = false;
+var mute_txtcolor;
 
 //start screen and restart screen
 var startScreen;
@@ -124,7 +126,8 @@ function setup() {
 	createCanvas(SizeW,SizeH);
 	dt = 300;
 	frameRate(60);
-    textColor = color(34, 230, 190)
+    textColor = color(34, 230, 190);
+    mute_txtcolor = color(225,125,155);
     backgroundColor = color(155,155,155);
   
     imgs[0] = loadImage("./assets/hat1.png"); imgs[1] = loadImage("./assets/hat2.png");imgs[2] = loadImage("./assets/hat3.png");
@@ -265,6 +268,14 @@ function draw() {
 		text("Mobile: Swipe left/right to move", xoffset, yoffset + 6 * txtSize);
 		text("             Tap to Rotate", xoffset, yoffset + 8 * txtSize);
 		text("             Swipe down to drop", xoffset, yoffset + 10 * txtSize);
+
+		xoffset = SizeW*0.27;
+		fill(55, 90);
+		rect(SizeW*0.2, SizeH*0.1 + txtSize*14, SizeW*0.6, txtSize*2.5, 3);
+		fill(mute_txtcolor);
+		text("Click/Tap Here to play ", xoffset, yoffset+13.2*txtSize);
+		text("     with no sound", xoffset,yoffset+14*txtSize);
+
 	}
 	if (grid != null && grid.checkEnd()) {
 		gameOver = true;
@@ -298,10 +309,16 @@ function touchStarted(){
 
 function touchEnded(){
 	if (!gameOn) {
+		if(!gameOver&&mouseX>=SizeW*0.2&&mouseX<=SizeW*0.8&&mouseY>=SizeH*0.1 + txtSize*14&&mouseY<=SizeH*0.1 + txtSize*16.5){
+			mute = true;
+			mute_txtcolor /= 2;
+		}
         initialize2();
 		initialize();
 		gameOver = false;
 		gameOn = true;
+		//rect(SizeW*0.2, SizeH*0.1 + txtSize*14, SizeW*0.6, txtSize*2.5, 3);
+
 		return;
 	}
 
@@ -546,7 +563,7 @@ function playsound_idx(id){
 function playSound(code) {
 	if(code==0) return;
 	if(combo_idx<combo){
-		playsound_idx(combo_idx++);
+		if(!mute)playsound_idx(combo_idx++);
 		//sounds[combo_idx++].play();
 		//testsound.play();
 	}
