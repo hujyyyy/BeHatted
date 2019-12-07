@@ -498,8 +498,14 @@ class Character{
 		push();
 		//translate(0,-q*1.5);
 		if(this.hatdrop==0&&this.faceAnim<this.faceAnimTime){
-			if(this.fid == 1) translate(this.sadAnim[this.faceAnim++],0);
-			if(this.fid == 2) translate(0,this.happyAnim[this.faceAnim++]);
+			textSize(q);
+			if(this.fid == 1) {
+				translate(this.sadAnim[this.faceAnim++],0);
+			}
+			if(this.fid == 2) {
+				text("+50",(offsetW-characters_size)/2*1.1,SizeH/2+characters_size*1.2-q);
+				translate(0,this.happyAnim[this.faceAnim++]); 
+			}
 		}
 		image(face,(offsetW-characters_size)/2,SizeH/2+characters_size*1.2+q,characters_size,characters_size);
 		
