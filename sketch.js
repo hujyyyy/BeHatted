@@ -125,11 +125,11 @@ function setup() {
   
     imgs[0] = loadImage("./assets/hat1.png"); imgs[1] = loadImage("./assets/hat2.png");imgs[2] = loadImage("./assets/hat3.png");
     characters[0] = loadImage("./assets/red.png"); characters[1] = loadImage("./assets/blue.png"); characters[2] = loadImage("./assets/yellow.png");
-    happy_faces[0] = loadImage("./assets/red.png"); happy_faces[1] = loadImage("./assets/blue.png"); happy_faces[2] = loadImage("./assets/yellow.png");
-  	sad_faces[0] = loadImage("./assets/red.png"); sad_faces[1] = loadImage("./assets/blue.png"); sad_faces[2] = loadImage("./assets/yellow.png");
+    happy_faces[0] = loadImage("./assets/red_happy.png"); happy_faces[1] = loadImage("./assets/blue_happy.png"); happy_faces[2] = loadImage("./assets/yellow_happy.png");
+  	sad_faces[0] = loadImage("./assets/red_sad.png"); sad_faces[1] = loadImage("./assets/blue_sad.png"); sad_faces[2] = loadImage("./assets/yellow_sad.png");
 
 
-  	background_img = loadImage("./assets/bg.jpg");
+  	background_img = loadImage("./assets/bg3.jpg");
 }
 
 function initialize() {
@@ -175,7 +175,7 @@ function draw() {
 	}
 
 	background(backgroundColor);
-    image(background_img,0,0);
+    image(background_img,0,0,SizeW,SizeH);
 
 	if (is_falling) {
         Grids[idx].drawGrid();
@@ -232,21 +232,36 @@ function draw() {
 
 	}
 	if (gameOver) {
-		noStroke();
-		fill(255, 60);
-		rect(110, 195, 240, 2 * txtSize, 3);
-		fill(textColor);
-		text("Game Over", 120, 220);
+		textSize(SizeW*0.8/12);
+		stroke(55);strokeWeight(6);
+		fill(55, 190);
+		rect(SizeW*0.1, SizeH*0.1, SizeW*0.8, txtSize*8, 3);
+		fill(225);
+		var xoffset = SizeW*0.2;
+		var yoffset = SizeH*0.2;
+		text("Your Final Score: ", xoffset*1.1, yoffset);
+		fill(230, 230, 12);
+		textSize(SizeW*0.8/10);
+		text(score.pointsAsStr(), xoffset*2, yoffset+txtSize);
+		fill(225);
+		textSize(SizeW*0.8/12);
+		text("Click/tap to Restart", xoffset, yoffset+3*txtSize);
 	}
-	if (!gameOn) {
-		noStroke();
-		fill(255, 60);
-		rect(10, 150, 590, 10 * txtSize, 3);
-		fill(textColor);
-		text("Click to start playing", 20, 180);
-		text("Tap on both side to move the tetris", 20, 180 + 2 * txtSize);
-		text("Tap on the grid to rotate", 20, 180 + 4 * txtSize);
-		text("Swipe down to drop it", 20, 180 + 6 * txtSize);
+	if (!gameOn&&!gameOver) {
+		//noStroke();
+		textSize(SizeW*0.8/16);
+		stroke(55);strokeWeight(4);
+		fill(55, 90);
+		rect(SizeW*0.1, SizeH*0.1, SizeW*0.8, txtSize*13, 3);
+		fill(225);
+		var xoffset = SizeW*0.12;
+		var yoffset = SizeH*0.17;
+		text("Click/tap to start playing", xoffset, yoffset);
+		text("PC: ARROW Keys to control", xoffset, yoffset + 2 * txtSize);
+		text("      SHIFT or DOWN to drop", xoffset, yoffset + 4 * txtSize);
+		text("Mobile: Swipe left/right to move", xoffset, yoffset + 6 * txtSize);
+		text("             Tap to Rotate", xoffset, yoffset + 8 * txtSize);
+		text("             Swipe down to drop", xoffset, yoffset + 10 * txtSize);
 
 	}
 	if (grid != null && grid.checkEnd()) {
@@ -358,7 +373,12 @@ class Score {
 		this.points += level * 100;
 	}
 
+	pointsAsStr(){
+		return this.formatPoint(this.points);
+	}
+
 	display() {
+		textSize(q/2);
 		stroke(50);
 		push();
 		translate(10, q);
@@ -457,6 +477,7 @@ class Character{
 		}
 
 		push();
+		//translate(0,-q*1.5);
 		if(this.hatdrop==0&&this.faceAnim<this.faceAnimTime){
 			if(this.fid == 1) translate(this.sadAnim[this.faceAnim++],0);
 			if(this.fid == 2) translate(0,this.happyAnim[this.faceAnim++]);
@@ -467,6 +488,10 @@ class Character{
 		for(let i=0;i<this.hatdrop;++i) translate(0,-q/5);
 
 		if(this.hatdrop>0)this.hatdrop--;
+		else {
+			if(this.hat_id==this.cid) this.fid = 2;
+			else this.fid = 1;
+		}
 
 		if(this.hat_id==0)
 			image(imgs[this.hat_id],(offsetW-characters_size)/2,SizeH/2+characters_size*1.2/3+q,characters_size,characters_size);
@@ -490,13 +515,14 @@ class Character{
 		}
 
 		this.hat_id = -1;
+		this.fid = 0;
 	}
 
 	new_hat(hat_idx){
 		this.hat_id = hat_idx;
 		this.hatdrop = this.hatdroptime; 
 		this.faceAnim = 0;
-		this.fid = this.cid==this.hat_id?2:1;
+		//this.fid = this.cid==this.hat_id?2:1;
 	}
 
 
